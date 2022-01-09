@@ -5,7 +5,7 @@ import SddmComponents 2.0
 import "./components"
 
 Rectangle {
-  id  : maya_root
+  id  : cpw_root
 
   property color primaryShade : config.primaryShade ? config.primaryShade : "#2a323c"
   property color primaryLight : config.primaryLight ? config.primaryLight : "#4cbce6"
@@ -52,8 +52,8 @@ Rectangle {
   //
   // Font sizes
   //
-  readonly property int spFontNormal  : 20
-  readonly property int spFontSmall   : 16
+  readonly property int spFontNormal  : 16
+  readonly property int spFontSmall   : 14
 
 
   LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
@@ -68,8 +68,8 @@ Rectangle {
       prompt_bg.color = successText
       prompt_txt.text = textConstants.loginSucceeded
 
-      maya_busy.visible = false;
-      maya_busy_anim.stop()
+      cpw_busy.visible = false;
+      cpw_busy_anim.stop()
 
       anim_success.start()
     }
@@ -77,8 +77,8 @@ Rectangle {
       prompt_bg.color = failureText
       prompt_txt.text = textConstants.loginFailed
 
-      maya_busy.visible = false;
-      maya_busy_anim.stop()
+      cpw_busy.visible = false;
+      cpw_busy_anim.stop()
 
       anim_failure.start()
     }
@@ -88,10 +88,10 @@ Rectangle {
   signal tryLogin()
 
   onTryLogin : {
-    maya_busy.visible = true;
-    maya_busy_anim.start()
+    cpw_busy.visible = true;
+    cpw_busy_anim.start()
 
-    sddm.login(maya_username.text, maya_password.text, maya_session.index);
+    sddm.login(cpw_username.text, cpw_password.text, cpw_session.index);
   }
 
 
@@ -171,7 +171,7 @@ Rectangle {
       // Welcome Text
       //
       Text {
-        id      : maya_welcome
+        id      : cpw_welcome
 
         width   : parent.width
         height  : parent.height
@@ -214,7 +214,7 @@ Rectangle {
       // Layout selection
       //
       LayoutBox {
-        id      : maya_layout
+        id      : cpw_layout
 
         width   : spUnit * 2
         height  : parent.height
@@ -232,8 +232,8 @@ Rectangle {
         arrowIcon: "images/ic_arrow_drop_down_white_24px.svg"
         arrowColor: primaryHue3
 
-        KeyNavigation.tab     : maya_username
-        KeyNavigation.backtab : maya_session
+        KeyNavigation.tab     : cpw_username
+        KeyNavigation.backtab : cpw_session
       }
 
       Text {
@@ -254,7 +254,7 @@ Rectangle {
       // Session selection
       //
       ComboBox {
-        id      : maya_session
+        id      : cpw_session
 
         model   : sessionModel
         index   : sessionModel.lastIndex
@@ -275,8 +275,8 @@ Rectangle {
         arrowIcon: "images/ic_arrow_drop_down_white_24px.svg"
         arrowColor: primaryHue3
 
-        KeyNavigation.tab     : maya_layout
-        KeyNavigation.backtab : maya_shutdown
+        KeyNavigation.tab     : cpw_layout
+        KeyNavigation.backtab : cpw_shutdown
       }
 
       Text {
@@ -321,7 +321,7 @@ Rectangle {
       // Shutdown button
       //
       SpButton {
-        id      : maya_shutdown
+        id      : cpw_shutdown
 
         height  : parent.height
         width   : (spUnit * 4)
@@ -337,8 +337,8 @@ Rectangle {
         hoverIconColor  : powerColor
         hoverLabelColor : accentShade
 
-        KeyNavigation.tab     : maya_session
-        KeyNavigation.backtab : maya_reboot
+        KeyNavigation.tab     : cpw_session
+        KeyNavigation.backtab : cpw_reboot
 
         onClicked: sddm.powerOff()
       }
@@ -347,7 +347,7 @@ Rectangle {
       // Reboot button
       //
       SpButton {
-        id      : maya_reboot
+        id      : cpw_reboot
 
         height  : parent.height
         width   : (spUnit * 4)
@@ -363,8 +363,8 @@ Rectangle {
         hoverIconColor  : rebootColor
         hoverLabelColor : accentShade
 
-        KeyNavigation.tab     : maya_shutdown
-        KeyNavigation.backtab : maya_login
+        KeyNavigation.tab     : cpw_shutdown
+        KeyNavigation.backtab : cpw_login
 
         onClicked: sddm.reboot()
       }
@@ -410,7 +410,7 @@ Rectangle {
       height  : (spUnit - (padSym * 2))
 
       TextBox {
-        id      : maya_username
+        id      : cpw_username
 
         width   : parent.width
         height  : parent.height
@@ -424,8 +424,8 @@ Rectangle {
         font.family     : opensans_cond_light.name
         font.pixelSize  : spFontSmall
 
-        KeyNavigation.tab     : maya_password
-        KeyNavigation.backtab : maya_layout
+        KeyNavigation.tab     : cpw_password
+        KeyNavigation.backtab : cpw_layout
       }
     }
 
@@ -457,7 +457,7 @@ Rectangle {
       height  : (spUnit - (padSym * 2))
 
       PasswordBox {
-        id      : maya_password
+        id      : cpw_password
 
         width   : parent.width
         height  : parent.height
@@ -478,12 +478,12 @@ Rectangle {
         font.family     : opensans_cond_light.name
         font.pixelSize  : spFontNormal
 
-        KeyNavigation.tab     : maya_login
-        KeyNavigation.backtab : maya_username
+        KeyNavigation.tab     : cpw_login
+        KeyNavigation.backtab : cpw_username
 
         Keys.onPressed: {
           if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
-            maya_root.tryLogin()
+            cpw_root.tryLogin()
 
             event.accepted = true;
           }
@@ -498,7 +498,7 @@ Rectangle {
       height  : (spUnit - (padSym * 2))
 
       Button {
-        id      : maya_login
+        id      : cpw_login
 
         width   : parent.width
         height  : parent.height
@@ -517,14 +517,14 @@ Rectangle {
         font.pixelSize  : spFontNormal
         font.weight     : Font.DemiBold
 
-        KeyNavigation.tab     : maya_reboot
-        KeyNavigation.backtab : maya_layout
+        KeyNavigation.tab     : cpw_reboot
+        KeyNavigation.backtab : cpw_layout
 
-        onClicked: maya_root.tryLogin()
+        onClicked: cpw_root.tryLogin()
 
         Keys.onPressed: {
           if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
-            maya_root.tryLogin()
+            cpw_root.tryLogin()
 
             event.accepted = true;
           }
@@ -537,7 +537,7 @@ Rectangle {
   // Busy animation (just above footer)
   //
   Rectangle {
-    id      : maya_busy
+    id      : cpw_busy
 
     x       : (parent.width  - (6 * spUnit)) / 2
     y       : (parent.height - (1.5 * spUnit))
@@ -552,7 +552,7 @@ Rectangle {
     border.width  : 1
 
     Rectangle {
-      id      : maya_busy_indicator
+      id      : cpw_busy_indicator
 
       x       : 0
       y       : 0
@@ -563,13 +563,13 @@ Rectangle {
     }
 
     SequentialAnimation {
-      id      : maya_busy_anim
+      id      : cpw_busy_anim
 
       running : false
       loops   : Animation.Infinite
 
       NumberAnimation {
-        target    : maya_busy_indicator
+        target    : cpw_busy_indicator
         property  : "x"
         from      : 0
         to        : (6 * spUnit) - (spUnit / 4)
@@ -577,7 +577,7 @@ Rectangle {
       }
 
       NumberAnimation {
-        target    : maya_busy_indicator
+        target    : cpw_busy_indicator
         property  : "x"
         to        : 0
         duration  : 2500
@@ -648,7 +648,7 @@ Rectangle {
       }
 
       onStopped: {
-        maya_password.text  = ""
+        cpw_password.text  = ""
         prompt_txt.text     = textConstants.prompt
       }
     }
@@ -656,9 +656,9 @@ Rectangle {
 
 
   Component.onCompleted: {
-    if (maya_username.text === "")
-      maya_username.focus = true
+    if (cpw_username.text === "")
+      cpw_username.focus = true
     else
-      maya_password.focus = true
+      cpw_password.focus = true
   }
 }
